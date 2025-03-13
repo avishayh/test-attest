@@ -25,6 +25,5 @@ jobs:
 
     - name: Verify JFrog CLI Installation
       run: | 
-        jfrog version
-        ls -la
-        pwd
+        jf version
+
