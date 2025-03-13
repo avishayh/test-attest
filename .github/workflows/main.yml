@@ -18,7 +18,7 @@ jobs:
 
     - name: Install JFrog CLI
       run: |
-        curl -fL https://get.jfrog.io/jfrog-cli/sh-install.sh | sh
+        ## curl -fL https://get.jfrog.io/jfrog-cli/sh-install.sh | sh
         # Optionally, you can add the JFrog CLI to your PATH
         echo "::add-path::$(pwd)/jfrog"  
 
