@@ -27,6 +27,6 @@ jobs:
     - name: Verify before attestations
       uses: actions/attest-build-provenance@v2
       with:
-        subject-path: $GITHUB_WORKSPACE/README.md
+        subject-path: ./README.md
 
 
