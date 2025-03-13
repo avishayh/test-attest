@@ -20,9 +20,12 @@ jobs:
       run: |
         curl -fL https://install-cli.jfrog.io | sh
         jf --version        
-
-    - name: Verify before attestations
-      run: | 
         sha2sum=$(sha256sum $GITHUB_WORKSPACE/README.md | awk '{print $1}')
         echo "SHA256: $sha2sum"
+
+    - name: Verify before attestations
+      uses: actions/attest-build-provenance@v2
+      with:
+        subject-path: $GITHUB_WORKSPACE/README.md
+
 
