@@ -16,5 +16,14 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Say Hello
-      run: echo "Hello, World!"
+    - name: Install JFrog CLI
+      run: |
+        curl -fL https://get.jfrog.io/jfrog-cli/sh-install.sh | sh
+        # Optionally, you can add the JFrog CLI to your PATH
+        echo "::add-path::$(pwd)/jfrog"  
+
+    - name: Verify JFrog CLI Installation
+      run: | 
+        jfrog version
+        ls -la
+        pwd
