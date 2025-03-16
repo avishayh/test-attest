@@ -38,14 +38,10 @@ jobs:
         
         dir=/home/runner/work/_temp/
         echo "Listing files in: $dir"
-        ls -lR /home/runner/work/_temp/
-        #for file in "$dir"/*; do
-        #    echo file: $file
-        #    if [ -f "$file" ]; then  # Check if it's a file
-        #        echo "\n=== File: $file ==="
-        #        cat "$file"
-        #    fi
-        #done
+        ls $dir
+        cd /home/runner/work/_temp/_runner_file_commands
+        ls | grep save_state | xargs cat
+        
 
     - name: Verify before attestations
       uses: actions/attest-build-provenance@v2
