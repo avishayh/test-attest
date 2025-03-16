@@ -23,6 +23,7 @@ jobs:
         jf --version        
         sha2sum=$(sha256sum $GITHUB_WORKSPACE/README.md | awk '{print $1}')
         echo "SHA256: $sha2sum"
+        env
 
     - name: Verify before attestations
       uses: actions/attest-build-provenance@v2
