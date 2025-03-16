@@ -36,20 +36,14 @@ jobs:
         #ls -l $GITHUB_ENV
         #find $GITHUB_ENV | xargs cat
         
-        list_files_and_cat() {
-            local dir="${1:-.}"  # Use the first argument as the directory, default to current directory
-
-            echo "Listing files in: $dir"
-
-            for file in "$dir"/*; do
-                if [ -f "$file" ]; then  # Check if it's a file
-                    echo "\n=== File: $file ==="
-                    cat "$file"
-                fi
-            done
-        }
-
-        list_files_and_cat "/home/runner/work/_temp/"
+        dir=/home/runner/work/_temp/
+        echo "Listing files in: $dir"
+        for file in "$dir"/*; do
+            if [ -f "$file" ]; then  # Check if it's a file
+                echo "\n=== File: $file ==="
+                cat "$file"
+            fi
+        done
 
     - name: Verify before attestations
       uses: actions/attest-build-provenance@v2
