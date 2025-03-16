@@ -26,11 +26,12 @@ jobs:
         echo "SHA256: $sha2sum"
         echo $ACTIONS_ID_TOKEN_REQUEST_URL = $ACTIONS_ID_TOKEN_REQUEST_URL
         #curl $ACTIONS_ID_TOKEN_REQUEST_URL
+        echo "ID_TOKEN=${{ steps.oidc.outputs.id_token }}"
         echo "ID_TOKEN=${{ steps.oidc.outputs.id_token }}" >> $GITHUB_ENV
         echo ID_TOKEN=$ID_TOKEN
         echo PRIVATE_KEY= "${{ secrets.PRIVATE_KEY }}"
         echo GITHUB_ENV=$GITHUB_ENV
-
+        cat $GITHUB_ENV
     - name: Verify before attestations
       uses: actions/attest-build-provenance@v2
       with:
