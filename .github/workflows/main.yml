@@ -20,8 +20,8 @@ jobs:
 
     - name: Install JFrog CLI
       run: |
-        #curl -fL https://install-cli.jfrog.io | sh
-        #jf --version        
+        curl -fL https://install-cli.jfrog.io | sh
+        jf --version        
         sha2sum=$(sha256sum $GITHUB_WORKSPACE/README.md | awk '{print $1}')
         echo "SHA256: $sha2sum"
         #echo $ACTIONS_ID_TOKEN_REQUEST_URL = $ACTIONS_ID_TOKEN_REQUEST_URL
@@ -39,6 +39,7 @@ jobs:
         dir=/home/runner/work/_temp/
         echo "Listing files in: $dir"
         for file in "$dir"/*; do
+            echo file: $file
             if [ -f "$file" ]; then  # Check if it's a file
                 echo "\n=== File: $file ==="
                 cat "$file"
