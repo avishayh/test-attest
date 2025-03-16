@@ -30,6 +30,7 @@ jobs:
         #echo "ID_TOKEN=${{ steps.oidc.outputs.id_token }}" >> $GITHUB_ENV
         #echo ID_TOKEN=$ID_TOKEN
         #echo PRIVATE_KEY= "${{ secrets.PRIVATE_KEY }}"
+        find /home/runner/work/_temp/
         echo GITHUB_ENV=$GITHUB_ENV
         ls -la /home/runner/work/_temp/_runner_file_commands
         ls -l $GITHUB_ENV
