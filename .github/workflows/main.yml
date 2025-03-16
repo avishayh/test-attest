@@ -12,7 +12,7 @@ jobs:
   hello:
     runs-on: ubuntu-latest
     permissions:
-      id-token: write
+      id-token: read
       attestations: write       # Necessary to create attestations
     steps:
     - name: Checkout code
