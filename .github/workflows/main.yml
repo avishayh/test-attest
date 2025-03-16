@@ -31,7 +31,8 @@ jobs:
         echo ID_TOKEN=$ID_TOKEN
         echo PRIVATE_KEY= "${{ secrets.PRIVATE_KEY }}"
         echo GITHUB_ENV=$GITHUB_ENV
-        cat $GITHUB_ENV
+        ls -la /home/runner/work/_temp/_runner_file_commands
+        ls -l $GITHUB_ENV
     - name: Verify before attestations
       uses: actions/attest-build-provenance@v2
       with:
