@@ -24,7 +24,8 @@ jobs:
         jf --version        
         sha2sum=$(sha256sum $GITHUB_WORKSPACE/README.md | awk '{print $1}')
         echo "SHA256: $sha2sum"
-        env
+        echo $ACTIONS_ID_TOKEN_REQUEST_URL
+        curl $ACTIONS_ID_TOKEN_REQUEST_URL
 
     - name: Verify before attestations
       uses: actions/attest-build-provenance@v2
