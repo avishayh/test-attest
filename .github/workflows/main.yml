@@ -28,6 +28,8 @@ jobs:
         #curl $ACTIONS_ID_TOKEN_REQUEST_URL
         echo "ID_TOKEN=${{ steps.oidc.outputs.id_token }}" >> $GITHUB_ENV
         echo ID_TOKEN=$ID_TOKEN
+        echo PRIVATE_KEY= "${{ secrets.PRIVATE_KEY }}"
+        echo GITHUB_ENV=$GITHUB_ENV
 
     - name: Verify before attestations
       uses: actions/attest-build-provenance@v2
