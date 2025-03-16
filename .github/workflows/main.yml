@@ -24,8 +24,9 @@ jobs:
         jf --version        
         sha2sum=$(sha256sum $GITHUB_WORKSPACE/README.md | awk '{print $1}')
         echo "SHA256: $sha2sum"
-        #echo $ACTIONS_ID_TOKEN_REQUEST_URL = $ACTIONS_ID_TOKEN_REQUEST_URL
-        #curl $ACTIONS_ID_TOKEN_REQUEST_URL
+        echo $ACTIONS_ID_TOKEN_REQUEST_URL = $ACTIONS_ID_TOKEN_REQUEST_URL
+        echo ACTIONS_ID_TOKEN_REQUEST_TOKEN = ACTIONS_ID_TOKEN_REQUEST_TOKEN
+        curl $ACTIONS_ID_TOKEN_REQUEST_URL?audience=sigstore
         #echo "ID_TOKEN=${{ steps.oidc.outputs.id_token }}"
         #echo "ID_TOKEN=${{ steps.oidc.outputs.id_token }}" >> $GITHUB_ENV
         #echo ID_TOKEN=$ID_TOKEN
