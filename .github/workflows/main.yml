@@ -30,11 +30,27 @@ jobs:
         #echo "ID_TOKEN=${{ steps.oidc.outputs.id_token }}" >> $GITHUB_ENV
         #echo ID_TOKEN=$ID_TOKEN
         #echo PRIVATE_KEY= "${{ secrets.PRIVATE_KEY }}"
-        find /home/runner/work/_temp/
-        echo GITHUB_ENV=$GITHUB_ENV
-        ls -la /home/runner/work/_temp/_runner_file_commands
-        ls -l $GITHUB_ENV
-        find $GITHUB_ENV | xargs cat
+        #find /home/runner/work/_temp/
+        #echo GITHUB_ENV=$GITHUB_ENV
+        #ls -la /home/runner/work/_temp/_runner_file_commands
+        #ls -l $GITHUB_ENV
+        #find $GITHUB_ENV | xargs cat
+        
+        list_files_and_cat() {
+            local dir="${1:-.}"  # Use the first argument as the directory, default to current directory
+
+            echo "Listing files in: $dir"
+
+            for file in "$dir"/*; do
+                if [ -f "$file" ]; then  # Check if it's a file
+                    echo "\n=== File: $file ==="
+                    cat "$file"
+                fi
+            done
+        }
+
+        list_files_and_cat "/home/runner/work/_temp/"
+
     - name: Verify before attestations
       uses: actions/attest-build-provenance@v2
       with:
