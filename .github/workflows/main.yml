@@ -25,6 +25,11 @@ jobs:
     - name: Verify JFrog CLI installation
       run: | 
         jf --version
+    - name: Push To Artifactory
+      env:
+        ARTIFACTORY_PATH: "dev-generic-loca/github-example/README.md"
+      run: | 
+        jf rt u README.md ${{ vars.ARTIFACTORY_PATH }} 
         
 
 #    - name: Install JFrog CLI
