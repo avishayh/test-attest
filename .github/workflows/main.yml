@@ -25,7 +25,7 @@ jobs:
     - name: Push To Artifactory
       id: build
       env:
-        ARTIFACT_PATH: "dev-generic-local/github-example/README.md"
+        ARTIFACT_PATH: "dev-generic-local/github-example/readme.md"
       run: |
         #upload to artifactory using jfrog cli
         jf rt u README.md ${{ env.ARTIFACT_PATH }} --detailed-summary | tee upload-summary.json
@@ -43,6 +43,7 @@ jobs:
       id: attest
       uses: actions/attest-build-provenance@v2
       with:
+#        e,g: https://evidencetrial.jfrog.io/artifactory/dev-generic-local/github-example/readme.md
 #        subject-name: ${{ vars.JF_URL }}/artifactory/${{ steps.build.outputs.artifact_path }}
         subject-name: ${{ steps.build.outputs.target }}
         subject-digest: sha256:${{ steps.build.outputs.artifact-digest }}
