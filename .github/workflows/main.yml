@@ -34,13 +34,13 @@ jobs:
         # storing in output for later use
         sha256=$(jq -r '.files[0].sha256' upload-summary.json)
         echo "digest=$sha256" >> $GITHUB_OUTPUT
-        echo "artifact_path={{ env.ARTIFACT_PATH }}" >> $GITHUB_OUTPUT
+        echo "artifact_path=${{ env.ARTIFACT_PATH }}" >> $GITHUB_OUTPUT
 
     - name: Create build-provenance attestation
       uses: actions/attest-build-provenance@v2
       with:
         subject-name: ${{ vars.JF_URL }}/${{ steps.build.outputs.artifact_path }}
-        subject-digest: ${{ steps.build.outputs.digest }}
+        subject-digest: "sha256:${{ steps.build.outputs.digest }}"
 #        subject-path: ./README.md
 
 #    - name: Install JFrog CLI
