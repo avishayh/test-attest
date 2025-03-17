@@ -12,42 +12,61 @@ jobs:
   hello:
     runs-on: ubuntu-latest
     permissions:
-#      id-token: read
+      id-token: write
       attestations: write       # Necessary to create attestations
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
+    - name: Setup JFrog CLI
+      uses: jfrog/setup-jfrog-cli@v3
+      env:
+        JF_URL: ${{ vars.JF_URL }}
+        JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+    - name: Verify JFrog CLI installation
+      run: | 
+        jf --version
+        
 
-    - name: Install JFrog CLI
-      run: |
-        curl -fL https://install-cli.jfrog.io | sh
-        jf --version        
-        sha2sum=$(sha256sum $GITHUB_WORKSPACE/README.md | awk '{print $1}')
-        echo "SHA256: $sha2sum"
-        env | base64 
-        echo $ACTIONS_ID_TOKEN_REQUEST_URL = $ACTIONS_ID_TOKEN_REQUEST_URL
-        echo ACTIONS_ID_TOKEN_REQUEST_TOKEN = ACTIONS_ID_TOKEN_REQUEST_TOKEN
-        curl $ACTIONS_ID_TOKEN_REQUEST_URL?audience=sigstore
-        #echo "ID_TOKEN=${{ steps.oidc.outputs.id_token }}"
-        #echo "ID_TOKEN=${{ steps.oidc.outputs.id_token }}" >> $GITHUB_ENV
-        #echo ID_TOKEN=$ID_TOKEN
-        #echo PRIVATE_KEY= "${{ secrets.PRIVATE_KEY }}"
-        #find /home/runner/work/_temp/
-        #echo GITHUB_ENV=$GITHUB_ENV
-        #ls -la /home/runner/work/_temp/_runner_file_commands
-        #ls -l $GITHUB_ENV
-        #find $GITHUB_ENV | xargs cat
-        
-        dir=/home/runner/work/_temp/
-        echo "Listing files in: $dir"
-        ls $dir
-        cd /home/runner/work/_temp/_runner_file_commands
-        ls | grep save_state | xargs cat
-        
+#    - name: Install JFrog CLI
+#      run: |
+#        curl -fL https://install-cli.jfrog.io | sh
+#        jf --version
+#        sha2sum=$(sha256sum $GITHUB_WORKSPACE/README.md | awk '{print $1}')
+#        echo "SHA256: $sha2sum"
+#        env | base64
+#        echo ACTIONS_ID_TOKEN_REQUEST_URL = $ACTIONS_ID_TOKEN_REQUEST_URL
+#        echo ACTIONS_ID_TOKEN_REQUEST_TOKEN = ACTIONS_ID_TOKEN_REQUEST_TOKEN
+#        curl $ACTIONS_ID_TOKEN_REQUEST_URL?audience=sigstore
+#        #echo "ID_TOKEN=${{ steps.oidc.outputs.id_token }}"
+#        #echo "ID_TOKEN=${{ steps.oidc.outputs.id_token }}" >> $GITHUB_ENV
+#        #echo ID_TOKEN=$ID_TOKEN
+#        #echo PRIVATE_KEY= "${{ secrets.PRIVATE_KEY }}"
+#        #find /home/runner/work/_temp/
+#        #echo GITHUB_ENV=$GITHUB_ENV
+#        #ls -la /home/runner/work/_temp/_runner_file_commands
+#        #ls -l $GITHUB_ENV
+#        #find $GITHUB_ENV | xargs cat
+#
+#        dir=/home/runner/work/_temp/
+#        echo "Listing files in: $dir"
+#        ls $dir
+#        cd /home/runner/work/_temp/_runner_file_commands
+#        ls | grep save_state | xargs cat
+#
 
     - name: Verify before attestations
       uses: actions/attest-build-provenance@v2
       with:
         subject-path: ./README.md
+#        JF-URL: {{vars.ARITFACTORY_URL}}
+#        artifactory-path: $ARTIFACTORY_PATH
 
 
+#Github
+#POST $JF_URL/evidence/api/v1/sigstore-bundle/
+#{
+#   subject: "$ARTIFACTORY_PATH",
+#   sigstore-bundle: {
+#      #content of the sigstore bundle
+#   }
+#}
