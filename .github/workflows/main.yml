@@ -41,10 +41,11 @@ jobs:
       id: attest
       uses: actions/attest-build-provenance@v2
       with:
-        subject-name: ${{ vars.JF_URL }}/artifactory/${{ steps.build.outputs.artifact_path }}
-#        subject-name: ${{ steps.build.outputs.target }}
+#        subject-name: ${{ vars.JF_URL }}/artifactory/${{ steps.build.outputs.artifact_path }}
+        subject-name: ${{ steps.build.outputs.target }}
         subject-digest: "sha256:${{ steps.build.outputs.digest }}"
         push-to-registry: true
+        github-token: ${{ secrets.JF_ACCESS_TOKEN }}
 
 #        JF-URL: {{vars.ARITFACTORY_URL}}
 #        artifactory-path: $ARTIFACTORY_PATH
