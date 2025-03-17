@@ -27,7 +27,7 @@ jobs:
         jf --version
     - name: Push To Artifactory
       env:
-        ARTIFACT_PATH: "dev-generic-loca/github-example/README.md"
+        ARTIFACT_PATH: "dev-generic-local/github-example/README.md"
       run: | 
         jf rt u README.md ${{ env.ARTIFACT_PATH }} 
         
