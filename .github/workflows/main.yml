@@ -26,7 +26,7 @@ jobs:
       id: build
       env:
         ARTIFACT_PATH: "dev-generic-local/github-example/readme.md"
-      run:
+      run: |
         #upload to artifactory using jfrog cli
         jf rt u README.md ${{ env.ARTIFACT_PATH }} --detailed-summary | tee upload-summary.json
         
