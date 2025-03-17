@@ -12,8 +12,8 @@ jobs:
   hello:
     runs-on: ubuntu-latest
     permissions:
-      id-token: write
-      attestations: write       # Necessary to create attestations
+      id-token: write           # Necessary to create attestations
+      attestations: write       # Necessary to push attestations to GH account
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -26,11 +26,21 @@ jobs:
       run: | 
         jf --version
     - name: Push To Artifactory
+      id: build
       env:
         ARTIFACT_PATH: "dev-generic-local/github-example/README.md"
       run: | 
-        jf rt u README.md ${{ env.ARTIFACT_PATH }} 
-        
+        jf rt u README.md ${{ env.ARTIFACT_PATH }} > upload-summary.json
+        sha256=$(jq -r '.files[0].sha256' upload-summary.json)
+        echo "digest=$sha256" >> $GITHUB_OUTPUT
+
+    - name: Create build-provenance attestation
+      uses: actions/attest-build-provenance@v2
+      with:
+        subject-name: ${{ env.JF_URL }}/${{ env.ARTIFACT_PATH }}
+#        subject-digest: sha256=$(sha256sum README.md | awk '{print $1}')
+        subject-digest: ${{ steps.build.outputs.digest }}
+#        subject-path: ./README.md
 
 #    - name: Install JFrog CLI
 #      run: |
@@ -59,10 +69,7 @@ jobs:
 #        ls | grep save_state | xargs cat
 #
 
-    - name: Verify before attestations
-      uses: actions/attest-build-provenance@v2
-      with:
-        subject-path: ./README.md
+
 #        JF-URL: {{vars.ARITFACTORY_URL}}
 #        artifactory-path: $ARTIFACTORY_PATH
 
