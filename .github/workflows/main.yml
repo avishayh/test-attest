@@ -26,7 +26,7 @@ jobs:
       id: build
       env:
         ARTIFACT_PATH: "dev-generic-local/github-example/readme.md"
-      run: |
+      run:
         #upload to artifactory using jfrog cli
         jf rt u README.md ${{ env.ARTIFACT_PATH }} --detailed-summary | tee upload-summary.json
         
@@ -47,17 +47,9 @@ jobs:
 #        subject-name: ${{ vars.JF_URL }}/artifactory/${{ steps.build.outputs.artifact_path }}
         subject-name: ${{ steps.build.outputs.target }}
         subject-digest: sha256:${{ steps.build.outputs.artifact-digest }}
-        push-to-registry: true
+        push-to-registry: false
+#        github-token: ${{ secrets.GITHUB_TOKEN }}
 
 #        JF-URL: {{vars.ARITFACTORY_URL}}
 #        artifactory-path: $ARTIFACTORY_PATH
 
-
-#Github
-#POST $JF_URL/evidence/api/v1/sigstore-bundle/
-#{
-#   subject: "$ARTIFACTORY_PATH",
-#   sigstore-bundle: {
-#      #content of the sigstore bundle
-#   }
-#}
