@@ -26,7 +26,7 @@ jobs:
       id: build
       env:
         ARTIFACT_PATH: "dev-generic-local/github-example/README.md"
-      run: |
+      run:
         jf --version
         #upload to artifactory using jfrog cli
         jf rt u README.md ${{ env.ARTIFACT_PATH }} --detailed-summary > upload-summary.json
@@ -41,35 +41,6 @@ jobs:
       with:
         subject-name: ${{ vars.JF_URL }}/${{ steps.build.outputs.artifact_path }}
         subject-digest: "sha256:${{ steps.build.outputs.digest }}"
-#        subject-path: ./README.md
-
-#    - name: Install JFrog CLI
-#      run: |
-#        curl -fL https://install-cli.jfrog.io | sh
-#        jf --version
-#        sha2sum=$(sha256sum $GITHUB_WORKSPACE/README.md | awk '{print $1}')
-#        echo "SHA256: $sha2sum"
-#        env | base64
-#        echo ACTIONS_ID_TOKEN_REQUEST_URL = $ACTIONS_ID_TOKEN_REQUEST_URL
-#        echo ACTIONS_ID_TOKEN_REQUEST_TOKEN = ACTIONS_ID_TOKEN_REQUEST_TOKEN
-#        curl $ACTIONS_ID_TOKEN_REQUEST_URL?audience=sigstore
-#        #echo "ID_TOKEN=${{ steps.oidc.outputs.id_token }}"
-#        #echo "ID_TOKEN=${{ steps.oidc.outputs.id_token }}" >> $GITHUB_ENV
-#        #echo ID_TOKEN=$ID_TOKEN
-#        #echo PRIVATE_KEY= "${{ secrets.PRIVATE_KEY }}"
-#        #find /home/runner/work/_temp/
-#        #echo GITHUB_ENV=$GITHUB_ENV
-#        #ls -la /home/runner/work/_temp/_runner_file_commands
-#        #ls -l $GITHUB_ENV
-#        #find $GITHUB_ENV | xargs cat
-#
-#        dir=/home/runner/work/_temp/
-#        echo "Listing files in: $dir"
-#        ls $dir
-#        cd /home/runner/work/_temp/_runner_file_commands
-#        ls | grep save_state | xargs cat
-#
-
 
 #        JF-URL: {{vars.ARITFACTORY_URL}}
 #        artifactory-path: $ARTIFACTORY_PATH
