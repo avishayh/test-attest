@@ -29,11 +29,13 @@ jobs:
       run: |
         #upload to artifactory using jfrog cli
         jf rt u README.md ${{ env.ARTIFACT_PATH }} --detailed-summary | tee upload-summary.json
+        
         jf --version
-        # storing in output for later use
         sha256=$(jq -r '.files[0].sha256' upload-summary.json)
         target=$(jq -r '.files[0].target' upload-summary.json)
-        echo "digest=$sha256" >> $GITHUB_OUTPUT
+        
+        # storing in output for later use
+        echo "artifact-digest=$sha256" >> $GITHUB_OUTPUT
         echo "target=$target" >> $GITHUB_OUTPUT
         echo "artifact_path=${{ env.ARTIFACT_PATH }}" >> $GITHUB_OUTPUT
 
@@ -43,9 +45,8 @@ jobs:
       with:
 #        subject-name: ${{ vars.JF_URL }}/artifactory/${{ steps.build.outputs.artifact_path }}
         subject-name: ${{ steps.build.outputs.target }}
-        subject-digest: "sha256:${{ steps.build.outputs.digest }}"
+        subject-digest: sha256:${{ steps.build.outputs.artifact-digest }}
         push-to-registry: true
-#        github-token: ${{ secrets.JF_ACCESS_TOKEN }}
 
 #        JF-URL: {{vars.ARITFACTORY_URL}}
 #        artifactory-path: $ARTIFACTORY_PATH
