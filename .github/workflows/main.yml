@@ -32,14 +32,19 @@ jobs:
         jf --version
         # storing in output for later use
         sha256=$(jq -r '.files[0].sha256' upload-summary.json)
+        target=$(jq -r '.files[0].target' upload-summary.json)
         echo "digest=$sha256" >> $GITHUB_OUTPUT
+        echo "target=$target" >> $GITHUB_OUTPUT
         echo "artifact_path=${{ env.ARTIFACT_PATH }}" >> $GITHUB_OUTPUT
 
     - name: Create build-provenance attestation
+      id: attest
       uses: actions/attest-build-provenance@v2
       with:
         subject-name: ${{ vars.JF_URL }}/artifactory/${{ steps.build.outputs.artifact_path }}
+#        subject-name: ${{ steps.build.outputs.target }}
         subject-digest: "sha256:${{ steps.build.outputs.digest }}"
+        push-to-registry: true
 
 #        JF-URL: {{vars.ARITFACTORY_URL}}
 #        artifactory-path: $ARTIFACTORY_PATH
