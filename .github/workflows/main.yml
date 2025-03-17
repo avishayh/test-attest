@@ -29,7 +29,7 @@ jobs:
       run: |
         jf --version
         #upload to artifactory using jfrog cli
-        jf rt u README.md ${{ env.ARTIFACT_PATH }} --details-summary > upload-summary.json
+        jf rt u README.md ${{ env.ARTIFACT_PATH }} --detailed-summary > upload-summary.json
         
         # storing in output for later use
         sha256=$(jq -r '.files[0].sha256' upload-summary.json)
