@@ -27,10 +27,9 @@ jobs:
       env:
         ARTIFACT_PATH: "dev-generic-local/github-example/README.md"
       run: |
-        jf --version
         #upload to artifactory using jfrog cli
-        jf rt u README.md ${{ env.ARTIFACT_PATH }} --detailed-summary > upload-summary.json
-        
+        jf rt u README.md ${{ env.ARTIFACT_PATH }} --detailed-summary | tee upload-summary.json
+        jf --version
         # storing in output for later use
         sha256=$(jq -r '.files[0].sha256' upload-summary.json)
         echo "digest=$sha256" >> $GITHUB_OUTPUT
@@ -39,7 +38,7 @@ jobs:
     - name: Create build-provenance attestation
       uses: actions/attest-build-provenance@v2
       with:
-        subject-name: ${{ vars.JF_URL }}/${{ steps.build.outputs.artifact_path }}
+        subject-name: ${{ vars.JF_URL }}/artifactory/${{ steps.build.outputs.artifact_path }}
         subject-digest: "sha256:${{ steps.build.outputs.digest }}"
 
 #        JF-URL: {{vars.ARITFACTORY_URL}}
