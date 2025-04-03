@@ -45,7 +45,6 @@ jobs:
 #       jf docker --version
        jf docker build \
         --tag ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.run_number }} \
-#        --platform linux/amd64,linux/arm64 \
         --metadata-file metadata.json \
         --push .
         
