@@ -14,7 +14,7 @@ jobs:
       attestations: write       # Necessary to push attestations to GH account
     env:
       DOCKER_REPO: 'evidence-demo-docker-dev'
-      IMAGE_NAME: 'github-hello-world:${{ github.run_number }}'
+      IMAGE_NAME: 'github-hello-world'
       JF_USERNAME: 'avishayh'
       JF_URL: ${{ vars.JF_URL }}            # e.g: https://evidencetrial.jfrog.io/
       JF_REGISTRY: ${{ vars.JF_REGISTRY }}  # e.g: evidencetrial.jfrog.io
@@ -44,7 +44,7 @@ jobs:
        docker buildx ls
        jf docker --version
        jf docker build \
-        --tag ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }} \
+        --tag ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.run_number }} \
         --platform linux/amd64,linux/arm64 \
         --metadata-file metadata.json \
         --push .
