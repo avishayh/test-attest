@@ -36,4 +36,13 @@ jobs:
         use: true
         platforms: linux/amd64,linux/arm64
         install: true
+    - name: Docker build and push
+      run: |
+       docker buildx ls
+       jf docker --version
+       jf docker build \
+          --tag ${{ env.JF_URL }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }} \
+          --platform linux/amd64,linux/arm64 --push .
+
+
 
