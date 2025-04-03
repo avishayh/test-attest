@@ -58,7 +58,7 @@ jobs:
       id: attest
       uses: actions/attest-build-provenance@v2.2.3
       with:
-        subject-name: ${{ env.JF_URL }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}
+        subject-name: ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}
         subject-digest: ${{ steps.docker.outputs.docker_digest }}
         push-to-registry: true
       
