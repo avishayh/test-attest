@@ -16,6 +16,7 @@ jobs:
       IMAGE_NAME: 'github-hello-world:${{ github.run_number }}'
       JF_USERNAME: 'avishayh'
       JF_URL: ${{ vars.JF_URL }}
+      JF_REGISTRY: ${{ vars.JF_REGISTRY }}
       JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
       JF_PROJECT: "default"
 #      DOCKER_CLI_EXPERIMENTAL: enabled
@@ -41,7 +42,7 @@ jobs:
        docker buildx ls
        jf docker --version
        jf docker build \
-          --tag ${{ env.JF_URL }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }} \
+          --tag ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }} \
           --platform linux/amd64,linux/arm64 --push .
 
 
