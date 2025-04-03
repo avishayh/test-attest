@@ -9,6 +9,7 @@ jobs:
   hello-docker:
     runs-on: ubuntu-latest
     permissions:
+      actions: read             # using $GITHUB_OUTPUT
       id-token: write           # Necessary to create attestations
       attestations: write       # Necessary to push attestations to GH account
     env:
@@ -37,7 +38,8 @@ jobs:
         use: true
         platforms: linux/amd64,linux/arm64
         install: true
-    - name: Docker build and push
+    - name: Docker Build and Push
+      id: docker
       run: |
        docker buildx ls
        jf docker --version
@@ -46,7 +48,18 @@ jobs:
         --platform linux/amd64,linux/arm64 \
         --metadata-file metadata.json \
         --push .
-       cat metadata.json | jq 
+        
+       #capture digest to step output
+       digest=$(cat metadata.json | jq '.["containerimage.digest"]')
+       echo "docker_digest=$digest" | tr -d '"' >> $GITHUB_OUTPUT
+
+    - name: Generate docker attestation
+      id: attest
+      uses: actions/attest-build-provenance@v2.2.3
+      with:
+        subject-name: ${{ vars.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/{{ env.IMAGE_NAME }}
+        subject-digest: ${{ steps.docker.outputs.docker_digest }}
+        push-to-registry: true
       
 
 
