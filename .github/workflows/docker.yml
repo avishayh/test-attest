@@ -51,13 +51,14 @@ jobs:
         
        #capture digest to step output
        digest=$(cat metadata.json | jq '.["containerimage.digest"]')
+       echo "docker_digest=$digest"
        echo "docker_digest=$digest" | tr -d '"' >> $GITHUB_OUTPUT
 
     - name: Generate docker attestation
       id: attest
       uses: actions/attest-build-provenance@v2.2.3
       with:
-        subject-name: ${{ vars.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/{{ env.IMAGE_NAME }}
+        subject-name: ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}
         subject-digest: ${{ steps.docker.outputs.docker_digest }}
         push-to-registry: true
       
