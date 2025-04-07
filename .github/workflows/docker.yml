@@ -80,11 +80,13 @@ jobs:
             oci://${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.run_number }} \
             --repo ${{ github.repository }} \
             --bundle-from-oci
-          echo "Verify using owner ${{ github.repository_owner }}"
+          echo "Verify using owner ${{ github.repository_owner }} and json format"
           gh attestation verify \
           oci://${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.run_number }} \
           --owner ${{ github.repository_owner }} \
-          --bundle-from-oci
+          --bundle-from-oci \
+          --format json \
+          --jq '.[].verificationResult.statement.predicate'
           echo DONE
 
 
