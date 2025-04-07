@@ -75,18 +75,20 @@ jobs:
         INPUT_PRIVATE-SIGNING: true       # avoid uploading to rekor transparency log
       run: |
           gh --version
-          echo "Verify using repo ${{ github.repository }}"
+          echo "Verify using repo ${{ github.repository }} and json format"
           gh attestation verify \
             oci://${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.run_number }} \
             --repo ${{ github.repository }} \
-            --bundle-from-oci
-          echo "Verify using owner ${{ github.repository_owner }} and json format"
+            --bundle-from-oci \
+            --format json --jq
+          
+          echo "Verify the predicate using owner ${{ github.repository_owner }} and json format"
           gh attestation verify \
-          oci://${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.run_number }} \
-          --owner ${{ github.repository_owner }} \
-          --bundle-from-oci \
-          --format json \
-          --jq '.[].verificationResult.statement.predicate'
+            oci://${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.run_number }} \
+            --owner ${{ github.repository_owner }} \
+            --bundle-from-oci \
+            --predicate-type https://in-toto.io/attestation/release/v0.1 \
+            --format json --jq
           echo DONE
 
 
