@@ -62,7 +62,7 @@ jobs:
         push-to-registry: true
     - name: Attest
       uses: actions/attest@v2
-      id: attest
+      id: attest-predicate
       with:
         subject-name: ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}
         subject-digest: ${{ steps.docker.outputs.docker_digest }}
