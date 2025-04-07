@@ -80,7 +80,7 @@ jobs:
             oci://${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.run_number }} \
             --repo ${{ github.repository }} \
             --bundle-from-oci \
-            --format json --jq
+            --format json | jq
           
           echo "Verify the predicate using owner ${{ github.repository_owner }} and json format"
           gh attestation verify \
@@ -88,7 +88,7 @@ jobs:
             --owner ${{ github.repository_owner }} \
             --bundle-from-oci \
             --predicate-type https://in-toto.io/attestation/release/v0.1 \
-            --format json --jq
+            --format json | jq
           echo DONE
 
 
