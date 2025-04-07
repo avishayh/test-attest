@@ -52,7 +52,7 @@ jobs:
        echo "docker_digest=$digest" | tr -d '"' >> $GITHUB_OUTPUT
 
     - name: Generate docker attestation
-      id: attest
+      id: attest-provenance
       uses: actions/attest-build-provenance@v2
       env:
         INPUT_PRIVATE-SIGNING: true       # avoid uploading to rekor transparency log
@@ -60,7 +60,7 @@ jobs:
         subject-name: ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }} #e.g: evidencetrial.jfrog.io/evidence-demo-docker-dev/github-hello-world
         subject-digest: ${{ steps.docker.outputs.docker_digest }}                         #e.g: sha256:5b756bece92a704cd1dbf971b650dd99d9f949a68ec8f3fa03b0d595694467a3
         push-to-registry: true
-    - name: Attest
+    - name: Upload external attestation
       uses: actions/attest@v2
       id: attest-predicate
       with:
@@ -74,10 +74,13 @@ jobs:
         GH_TOKEN: ${{ github.token }}     # required to add with gh tool
         INPUT_PRIVATE-SIGNING: true       # avoid uploading to rekor transparency log
       run: |
+          gh --version
           echo "Repository Name: ${{ github.repository }}"
           echo "Repository Owner: ${{ github.repository_owner }}"
-          gh attestation verify oci://${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.run_number }} --repo ${{ github.repository }}
-          echo "Finished GH verify attestation" 
+          output=$(gh attestation verify oci://${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.run_number }} --repo ${{ github.repository }})
+          echo "Finished GH verify attestation with :"
+          echo $output
+          echo DONE
 
 
 
