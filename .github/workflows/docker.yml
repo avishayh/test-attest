@@ -75,12 +75,16 @@ jobs:
         INPUT_PRIVATE-SIGNING: true       # avoid uploading to rekor transparency log
       run: |
           gh --version
-          echo "Repository Name: ${{ github.repository }}"
-          echo "Repository Owner: ${{ github.repository_owner }}"
+          echo "Verify using repo ${{ github.repository }}"
           gh attestation verify \
             oci://${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.run_number }} \
             --repo ${{ github.repository }} \
             --bundle-from-oci
+          echo "Verify using owner ${{ github.repository_owner }}"
+          gh attestation verify \
+          oci://${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.run_number }} \
+          --owner ${{ github.repository_owner }} \
+          --bundle-from-oci
           echo DONE
 
 
