@@ -1,0 +1,48 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "evidencetrial.jfrog.io/evidence-demo-docker-dev/github-hello-world",
+      "digest": {
+        "sha256": "315fdc2317c1cea79eeb0bcecefb8ba19763fdfe7cbe94980aa9beb7cf9b9390"
+      }
+    }
+  ],
+  "predicateType": "https://slsa.dev/provenance/v1",
+  "predicate": {
+    "buildDefinition": {
+      "buildType": "https://actions.github.io/buildtypes/workflow/v1",
+      "externalParameters": {
+        "workflow": {
+          "ref": "refs/heads/main",
+          "repository": "https://github.com/avishayh/test-attest",
+          "path": ".github/workflows/docker.yml"
+        }
+      },
+      "internalParameters": {
+        "github": {
+          "event_name": "push",
+          "repository_id": "947952664",
+          "repository_owner_id": "4086454",
+          "runner_environment": "github-hosted"
+        }
+      },
+      "resolvedDependencies": [
+        {
+          "uri": "git+https://github.com/avishayh/test-attest@refs/heads/main",
+          "digest": {
+            "gitCommit": "2804b26f555fd92037e73f210dfe637a93d36399"
+          }
+        }
+      ]
+    },
+    "runDetails": {
+      "builder": {
+        "id": "https://github.com/avishayh/test-attest/.github/workflows/docker.yml@refs/heads/main"
+      },
+      "metadata": {
+        "invocationId": "https://github.com/avishayh/test-attest/actions/runs/14305649989/attempts/3"
+      }
+    }
+  }
+}
