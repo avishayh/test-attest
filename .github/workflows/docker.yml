@@ -68,12 +68,14 @@ jobs:
         subject-digest: ${{ steps.docker.outputs.docker_digest }}                         #e.g: sha256:5b756bece92a704cd1dbf971b650dd99d9f949a68ec8f3fa03b0d595694467a3
         predicate-type: 'https://in-toto.io/attestation/release/v0.1'
         predicate: '{"key":"some value"}'
-        push-to-registry: false
+        push-to-registry: true
     - name: Verify build artifact
       env:
         GH_TOKEN: ${{ github.token }}     # required to add with gh tool
         INPUT_PRIVATE-SIGNING: true       # avoid uploading to rekor transparency log
       run: |
+          echo Found 1 {{ steps.attest-provenance.outputs.bundle-path }}
+          echo Found 2 {{ steps.attest-predicate.outputs.bundle-path }}
           gh --version
           echo "Verify using repo ${{ github.repository }} and json format"
           gh attestation verify \
