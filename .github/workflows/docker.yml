@@ -74,8 +74,9 @@ jobs:
         GH_TOKEN: ${{ github.token }}     # required to add with gh tool
         INPUT_PRIVATE-SIGNING: true       # avoid uploading to rekor transparency log
       run: |
-          echo Found 1 ${{ steps.attest-provenance.outputs.bundle-path }}
-          echo Found 2 ${{ steps.attest-predicate.outputs.bundle-path }}
+          echo Found Provenance in ${{ steps.attest-provenance.outputs.bundle-path }}
+          cat ${{ steps.attest-provenance.outputs.bundle-path }}
+        
           gh --version
           echo "Verify using repo ${{ github.repository }} and json format"
           gh attestation verify \
