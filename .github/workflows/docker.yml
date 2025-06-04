@@ -76,8 +76,7 @@ jobs:
           sudo mv cosign-linux-amd64 /usr/local/bin/cosign
           cosign version
           echo "Signing image with cosign"
-          cosign sign --output json \
-                oci://${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.run_number }}
+          cosign sign oci://${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.run_number }}
     - name: Verify build artifact
       env:
         GH_TOKEN: ${{ github.token }}     # required to add with gh tool
