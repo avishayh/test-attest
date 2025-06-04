@@ -69,6 +69,12 @@ jobs:
         predicate-type: 'https://in-toto.io/attestation/release/v0.1'
         predicate: '{"key":"some value"}'
         push-to-registry: true
+    - name: Install Cosign
+      run: |
+        curl -LO https://github.com/sigstore/cosign/releases/latest/download/cosign-linux-amd64
+        chmod +x cosign-linux-amd64
+        sudo mv cosign-linux-amd64 /usr/local/bin/cosign
+        cosign -version
     - name: Verify build artifact
       env:
         GH_TOKEN: ${{ github.token }}     # required to add with gh tool

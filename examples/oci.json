@@ -1,0 +1,20 @@
+{
+  "apiVersion": "0.0.1",
+  "kind": "dsse",
+  "spec": {
+    "envelopeHash": {
+      "algorithm": "sha256",
+      "value": "ab604fccaf2398eff1e297bccc14889a9b0c10588550101ef9752ef105f5096f"
+    },
+    "payloadHash": {
+      "algorithm": "sha256",
+      "value": "5e964170decf13b7555eeff8017c2c7ccd9feea9983793c0cde87549c5f8d8bf"
+    },
+    "signatures": [
+      {
+        "signature": "MEUCIHKxSi9CnKGjH3LdHk6oV7n2C7dPqAe7nldMFCGdYpROAiEA8+WVeENj1qMXtEWEnCn8gXv1NuPSPBAm2a8kYkoKuh8=",
+        "verifier": "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUZrd0V3WUhLb1pJemowQ0FRWUlLb1pJemowREFRY0RRZ0FFRFp6RWZBWW9tMGhCMU40RkFUWS9uL3hxZUpEdwpjaDZFZTBpbDM2YnFTZGNEcGh6V1ZXSFVENEJ2cSt4QXY2bG5jY0N3NlV0UDNpdis0WHlpUit1UVFBPT0KLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg=="
+      }
+    ]
+  }
+}
