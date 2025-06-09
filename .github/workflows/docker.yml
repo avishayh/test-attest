@@ -70,6 +70,7 @@ jobs:
         predicate: '{"key":"some value"}'
         push-to-registry: false
     - name: Install and sign with Cosign
+      if: false
       run: |
           curl -LO https://github.com/sigstore/cosign/releases/latest/download/cosign-linux-amd64
           chmod +x cosign-linux-amd64
@@ -82,15 +83,14 @@ jobs:
         GH_TOKEN: ${{ github.token }}     # required to add with gh tool
         INPUT_PRIVATE-SIGNING: true       # avoid uploading to rekor transparency log
       run: |
-          echo Found Provenance in ${{ steps.attest-provenance.outputs.bundle-path }}
-          cat ${{ steps.attest-provenance.outputs.bundle-path }}
-          echo Found Provenance in ${{ steps.attest-predicate.outputs.bundle-path }}
-          cat ${{ steps.attest-predicate.outputs.bundle-path }}
+        echo "Checking new attestation manifest"
+        while IFS= read -r file; do
+          echo "File: $file"
+          cat "$file"
+        done < /tmp/attestations
         
-          echo "Checking new attestation integration"
-          cat /tmp/attestations
         
-          gh --version
+        gh --version
           echo "Verify using repo ${{ github.repository }} and json format"
           gh attestation verify \
             oci://${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.run_number }} \
