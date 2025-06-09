@@ -88,7 +88,7 @@ jobs:
           cat ${{ steps.attest-predicate.outputs.bundle-path }}
         
           echo "Checking new attestation integration"
-          cat /tmp/attestation
+          cat /tmp/attestations
         
           gh --version
           echo "Verify using repo ${{ github.repository }} and json format"
