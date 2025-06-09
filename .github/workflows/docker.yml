@@ -61,7 +61,6 @@ jobs:
         subject-digest: ${{ steps.docker.outputs.docker_digest }}                         #e.g: sha256:5b756bece92a704cd1dbf971b650dd99d9f949a68ec8f3fa03b0d595694467a3
         push-to-registry: false
     - name: Upload external attestation
-#      uses: actions/attest@v2
       uses: actions/attest@kommendorkapten/attestations-summary-file
       id: attest-predicate
       with:
@@ -85,6 +84,8 @@ jobs:
       run: |
           echo Found Provenance in ${{ steps.attest-provenance.outputs.bundle-path }}
           cat ${{ steps.attest-provenance.outputs.bundle-path }}
+          echo Found Provenance in ${{ steps.attest-predicate.outputs.bundle-path }}
+          cat ${{ steps.attest-predicate.outputs.bundle-path }}
         
           echo "Checking new attestation integration"
           cat /tmp/attestation
