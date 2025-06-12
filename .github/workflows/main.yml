@@ -7,6 +7,12 @@ on:
   pull_request:
     branches:
       - main  # Change this to the branch for PRs
+  # Allows the workflow to be triggered manually
+  workflow_dispatch:
+    subject-name:
+      description: 'provide external subject name for the attestation'
+      required: true
+      default: 'readme.md'
 
 jobs:
   hello:
@@ -46,7 +52,7 @@ jobs:
       with:
 #        e,g: https://evidencetrial.jfrog.io/artifactory/dev-generic-local/github-example/readme.md
 #        subject-name: ${{ vars.JF_URL }}/artifactory/${{ steps.build.outputs.artifact_path }}
-        subject-name: ${{ steps.build.outputs.target }}
+        subject-name: ${{ github.event.inputs.username }}
         subject-digest: sha256:${{ steps.build.outputs.artifact-digest }}
         push-to-registry: true
 
