@@ -32,7 +32,8 @@ jobs:
         
         jf --version
         sha256=$(jq -r '.files[0].sha256' upload-summary.json)
-        target=$(jq -r '.files[0].target' upload-summary.json)
+        #target=$(jq -r '.files[0].target' upload-summary.json)
+        target=$(jq -r '.files[0].target' upload-summary.json | sed 's|^https://||')
         
         # storing in output for later use
         echo "artifact-digest=$sha256" >> $GITHUB_OUTPUT
