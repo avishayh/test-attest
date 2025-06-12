@@ -61,7 +61,7 @@ jobs:
 #        subject-name: ${{ vars.JF_URL }}/artifactory/${{ steps.build.outputs.artifact_path }}
         subject-name: ${{ inputs.subject-name }}
         subject-digest: sha256:${{ steps.build.outputs.artifact-digest }}
-        push-to-registry: $ {{ inputs.push-to-registry }}
+        push-to-registry: ${{ inputs.push-to-registry }}
 
 #        github-token: ${{ secrets.GITHUB_TOKEN }}
 
