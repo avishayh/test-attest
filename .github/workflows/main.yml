@@ -13,6 +13,7 @@ on:
       description: 'provide external subject name for the attestation'
       required: true
       default: 'readme.md'
+      type: string
 
 jobs:
   hello:
@@ -52,7 +53,7 @@ jobs:
       with:
 #        e,g: https://evidencetrial.jfrog.io/artifactory/dev-generic-local/github-example/readme.md
 #        subject-name: ${{ vars.JF_URL }}/artifactory/${{ steps.build.outputs.artifact_path }}
-        subject-name: ${{ github.event.inputs.username }}
+        subject-name: ${{ inputs.subject-name }}
         subject-digest: sha256:${{ steps.build.outputs.artifact-digest }}
         push-to-registry: true
 
