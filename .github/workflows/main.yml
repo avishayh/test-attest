@@ -9,11 +9,12 @@ on:
       - main  # Change this to the branch for PRs
   # Allows the workflow to be triggered manually
   workflow_dispatch:
-    subject-name:
-      description: 'provide external subject name for the attestation'
-      required: true
-      default: 'readme.md'
-      type: string
+    inputs:
+      subject-name:
+        description: 'provide external subject name for the attestation'
+        required: true
+        default: 'readme.md'
+        type: string
 
 jobs:
   hello:
