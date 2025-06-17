@@ -1,0 +1,43 @@
+@startuml
+actor "Github Build" as Build
+participant "actions/attest" as GH_Attest
+participant "jfrog/setup-jfrog-cli" as GH_JFrog
+participant "JFrog CLI" as JF_CLI
+participant "JFrog Evidence Service" as EvidenceService
+
+Build -> GH_JFrog: Configure JFrog CLI
+Build -> GH_Attest: Start attestation
+
+activate GH_Attest
+    GH_Attest -> GH_Attest: Create sigstore-bundle attestation
+    note right of GH_Attest: write path to ${RUNNER_TEMP}/created_attestation_paths.txt
+    GH_Attest --> Build: Attestation complete
+deactivate GH_Attest
+
+== Post Build Phase ==
+GH_JFrog -> EvidenceService : GET /evidence/api/v1/config
+activate EvidenceService
+    EvidenceService -> EvidenceService : check E license
+    EvidenceService --> GH_JFrog : { external_collection_enabled : "true|false"}
+deactivate EvidenceService
+alt If external_collection_enabled is false
+    GH_JFrog --> Build : Exit flow
+end
+note right of GH_JFrog: ${RUNNER_TEMP}/created_attestation_paths.txt
+loop For each file_path in attestation_manifest
+    GH_JFrog -> JF_CLI: jf evd create --sigstore-bundle <file_path>
+    activate JF_CLI
+    JF_CLI -> JF_CLI: Parse and extract subject-name
+    JF_CLI -> JF_CLI: Recognize by package or subject
+    alt subject-name: subject://repo-local/path/to/file.txt
+        JF_CLI -> EvidenceService: POST /evidence/api/v1/subject/repo-local/path/to/file.txt
+    else subject-name: {repo-key}/{package-name}[?{version}]
+        JF_CLI -> EvidenceService: POST /evidence/api/v1/package/{repo-key}/{package-name}[?{version}
+end
+deactivate JF_CLI
+JF_CLI -> GH_JFrog: Report success/failure result with information
+end
+GH_JFrog --> Build: Generate evidence report in job-summary
+
+
+@enduml
