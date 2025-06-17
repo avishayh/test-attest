@@ -1,4 +1,11 @@
 @startuml
+!theme cerulean
+hide footbox
+
+!define JFROG_ICON https://speedmedia.jfrog.com/08612fe1-9391-4cf3-ac1a-6dd49c36b276/media.jfrog.com/wp-content/uploads/2024/08/08132607/jfrog-logo-2022.svg
+!define GITHUB_ICON https://img.icons8.com/?size=65&id=12599&format=png&color=000000
+title <img:JFROG_ICON> JFrog Evidence <-> Github Attestation <img:GITHUB_ICON>
+
 actor "Github Build" as Build
 participant "actions/attest" as GH_Attest
 participant "jfrog/setup-jfrog-cli" as GH_JFrog
@@ -8,17 +15,20 @@ participant "JFrog Evidence Service" as EvidenceService
 Build -> GH_JFrog: Configure JFrog CLI
 Build -> GH_Attest: Start attestation
 
-activate GH_Attest
-    GH_Attest -> GH_Attest: Create sigstore-bundle attestation
-    note right of GH_Attest: write path to ${RUNNER_TEMP}/created_attestation_paths.txt
-    GH_Attest --> Build: Attestation complete
+activate GH_Attest #LightGreen
+GH_Attest -> GH_Attest: Create sigstore-bundle attestation
+note right of GH_Attest
+    Write path to
+    ${RUNNER_TEMP}/created_attestation_paths.txt
+end note
+GH_Attest --> Build: Attestation complete
 deactivate GH_Attest
 
 == Post Build Phase ==
 GH_JFrog -> EvidenceService : GET /evidence/api/v1/config
-activate EvidenceService
-    EvidenceService -> EvidenceService : check E license
-    EvidenceService --> GH_JFrog : { external_collection_enabled : "true|false"}
+activate EvidenceService #LightGreen
+EvidenceService -> EvidenceService : check E license
+EvidenceService --> GH_JFrog : { external_collection_enabled : "true|false"}
 deactivate EvidenceService
 alt If external_collection_enabled is false
     GH_JFrog --> Build : Exit flow
@@ -26,18 +36,17 @@ end
 note right of GH_JFrog: ${RUNNER_TEMP}/created_attestation_paths.txt
 loop For each file_path in attestation_manifest
     GH_JFrog -> JF_CLI: jf evd create --sigstore-bundle <file_path>
-    activate JF_CLI
+    activate JF_CLI #LightGreen
     JF_CLI -> JF_CLI: Parse and extract subject-name
     JF_CLI -> JF_CLI: Recognize by package or subject
     alt subject-name: subject://repo-local/path/to/file.txt
         JF_CLI -> EvidenceService: POST /evidence/api/v1/subject/repo-local/path/to/file.txt
-    else subject-name: {repo-key}/{package-name}[?{version}]
-        JF_CLI -> EvidenceService: POST /evidence/api/v1/package/{repo-key}/{package-name}[?{version}
-end
-deactivate JF_CLI
-JF_CLI -> GH_JFrog: Report success/failure result with information
+    end
+    alt subject-name: {repo-key}/{package-name}[?{version}]
+        JF_CLI -> EvidenceService: POST /evidence/api/v1/package/{:repo-key}/{:package-name}[?{:version}
+    end
+    deactivate JF_CLI
+    JF_CLI -> GH_JFrog: Report success/failure result with information
 end
 GH_JFrog --> Build: Generate evidence report in job-summary
-
-
 @enduml
