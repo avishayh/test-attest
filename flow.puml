@@ -25,6 +25,9 @@ GH_Attest --> Build: Attestation complete
 deactivate GH_Attest
 
 == Post Build Phase ==
+alt If disable_auto_evidence_collection is true
+    GH_JFrog --> Build : Exit flow
+end
 GH_JFrog -> EvidenceService : GET /evidence/api/v1/config
 activate EvidenceService #LightGreen
 EvidenceService -> EvidenceService : check E license
