@@ -59,7 +59,7 @@ jobs:
       with:
         subject-name: ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }} #e.g: evidencetrial.jfrog.io/evidence-demo-docker-dev/github-hello-world
         subject-digest: ${{ steps.docker.outputs.docker_digest }}                         #e.g: sha256:5b756bece92a704cd1dbf971b650dd99d9f949a68ec8f3fa03b0d595694467a3
-        push-to-registry: false
+        push-to-registry: true
     - name: Upload external attestation
       uses: actions/attest@v2
       id: attest-predicate

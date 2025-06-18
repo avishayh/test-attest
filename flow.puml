@@ -25,7 +25,8 @@ GH_Attest --> Build: Attestation complete
 deactivate GH_Attest
 
 == Post Build Phase ==
-alt If disable_auto_evidence_collection is true
+note right of GH_JFrog: ${RUNNER_TEMP}/created_attestation_paths.txt
+alt If disable_auto_evidence_collection is true || manifest file is empty
     GH_JFrog --> Build : Exit flow
 end
 GH_JFrog -> EvidenceService : GET /evidence/api/v1/config
@@ -36,7 +37,6 @@ deactivate EvidenceService
 alt If external_collection_enabled is false
     GH_JFrog --> Build : Exit flow
 end
-note right of GH_JFrog: ${RUNNER_TEMP}/created_attestation_paths.txt
 loop For each file_path in attestation_manifest
     GH_JFrog -> JF_CLI: jf evd create --sigstore-bundle <file_path>
     activate JF_CLI #LightGreen
