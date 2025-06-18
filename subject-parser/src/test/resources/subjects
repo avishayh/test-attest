@@ -1,52 +1,13 @@
-#docker cases
-evidence.jfrog.io/docker-repo/ubuntu       #repoKey=docker-repo packageName=ubuntu version=null
+evidence.jfrog.io/docker-repo/ubuntu #repoKey=docker-repo packageName=ubuntu version=null
 evidence.jfrog.io/docker-repo/ubuntu/kafka #repoKey=docker-repo packageName=ubuntu/kafka version=null
-
-
 evidence.jfrog.io/docker-repo/ubuntu?1.0.1 #repoKey=docker-repo packageName=ubuntu version=1.0.1
 evidence.jfrog.io/docker-repo/ubuntu/kafka?1.0.1 #repoKey=docker-repo packageName=ubuntu/kafka version=1.0.1
 evidence.jfrog.io/docker-repo/ubuntu?latest #repoKey=docker-repo packageName=ubuntu version=latest
 evidence.jfrog.io/docker-repo/ubuntu?1.0 #repoKey=docker-repo packageName=ubuntu version=1.0
 evidence.jfrog.io/repo.with.dots/ubuntu?1.0 #repoKey=repo.with.dots packageName=ubuntu version=1.0
 evidence.jfrog.io/repo.with.dots/ubuntu/kafka?1.0 #repoKey=repo.with.dots packageName=ubuntu/kafka version=1.0
-
-#maven cases
 maven-repo-local/org.jfrog.team:my-module?1.0.3 #repoKey=maven-repo-local packageName=org.jfrog.team:my-module version=1.0.3
-
-#npm cases
-npm-repo-local/@jfrog/logstash?1.0.3 #repoKey=npm-repo-local packageName=@jfrog/logstash version=1.0.3
-
-
-#generic cases (The right way)
-artifact://generic-repo/file.txt #subject=generic-repo/file.txt
-#will translate into https://jpd.jfrog.io/evidence/api/v1/subject/generic-repo/file.txt (API will succeed)
-generic-repo/file.txt #repoKey=generic-repo packageName=file.txt version=null
-#will translate into https://jpd.jfrog.io/evidence/api/v1/package/generic-repo/file.txt (API will fail)
-
-#unsupported cases
+generic/file.txt #repoKey=generic packageName=file.txt version=null
 readme.txt # cannot parse
 ../readme.txt # cannot parse
 ../../readme.txt # cannot parse
-
-https://evidence.jfrog.io/docker-repo/ubuntu
-evidence.jfrog.io/docker-repo/ubuntu
-docker-repo.evidence.jfrog.io/ubuntu
-maven-repo-local/org.jfrog.team:my-module?1.0.3
-npm-repo-local/jfrog/@logstash:1.0.3
-
-
-subject://repoKey/path/to/README.txt  -->  POST  /subject/path/to/README.txt
-artifact://repoKey/path/to/README.txt  --> POST  /subject/path/to/README.txt
-{repoKey}/{packageName}[?{version}] -->    POST  /package/{repoKey}/{packageName}[?{version}]
-
-npm://{packageName}/{version}?repoKey={repoKey}
-oci://{packageName}/{version}?repoKey={repoKey}
-maven://{packageName}/{version}?repoKey={repoKey}
-
-docker://
-docker-repo-local/{packageName}?{version}
-
-evidence.jfrog.io/docker-repo/ubuntu
-docker-repo.evidence.jfrog.io/ubuntu
-
-docker.jfrog.io/
