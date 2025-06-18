@@ -26,15 +26,15 @@ deactivate GH_Attest
 
 == Post Build Phase ==
 note right of GH_JFrog: ${RUNNER_TEMP}/created_attestation_paths.txt
-alt If disable_auto_evidence_collection is true || manifest file is empty
+alt If <color green>disable-auto-evidence-collection</color> is true || manifest file is empty
     GH_JFrog --> Build : Exit flow
 end
 GH_JFrog -> EvidenceService : GET /evidence/api/v1/config
 activate EvidenceService #LightGreen
 EvidenceService -> EvidenceService : check E license
-EvidenceService --> GH_JFrog : { external_collection_enabled : "true|false"}
+EvidenceService --> GH_JFrog : { <color green>external_evidence_collection_enabled</color> : "true|false"}
 deactivate EvidenceService
-alt If external_collection_enabled is false
+alt If <color green>external_evidence_collection_enabled</color> is false
     GH_JFrog --> Build : Exit flow
 end
 loop For each file_path in attestation_manifest
