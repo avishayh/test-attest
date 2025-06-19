@@ -38,7 +38,7 @@ alt If <color green>external_evidence_collection_enabled</color> is false
     GH_JFrog --> Build : Exit flow
 end
 loop For each file_path in attestation_manifest
-    GH_JFrog -> JF_CLI: jf evd create --sigstore-bundle <file_path>
+    GH_JFrog -> JF_CLI: jf evd create --sigstore-bundle <file_path> -provider-id github
     activate JF_CLI #LightGreen
     JF_CLI -> JF_CLI: Parse and extract subject-name
     JF_CLI -> JF_CLI: Recognize by package or subject
