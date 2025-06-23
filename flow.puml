@@ -41,11 +41,11 @@ loop For each file_path in attestation_manifest
     GH_JFrog -> JF_CLI: jf evd create --sigstore-bundle <file_path> -provider-id github
     activate JF_CLI #LightGreen
     JF_CLI -> JF_CLI: Parse and extract subject-name
-    JF_CLI -> JF_CLI: Recognize by package or subject
-    alt subject-name: subject://repo-local/path/to/file.txt
+    JF_CLI -> JF_CLI: <color red>(Phase 2) </color> Recognize by package or subject
+    alt subject-name: repo-local/path/to/file.txt
         JF_CLI -> EvidenceService: POST /evidence/api/v1/subject/repo-local/path/to/file.txt
     end
-    alt subject-name: {repo-key}/{package-name}[?{version}]
+    alt <color red>(Phase 2) </color> subject-name: {repo-key}/{package-name}[?{version}]</color>
         JF_CLI -> EvidenceService: POST /evidence/api/v1/package/{:repo-key}/{:package-name}[?{:version}
     end
     deactivate JF_CLI
