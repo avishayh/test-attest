@@ -83,7 +83,7 @@ jobs:
         GH_TOKEN: ${{ github.token }}     # required to add with gh tool
         INPUT_PRIVATE-SIGNING: true       # avoid uploading to rekor transparency log
       run: |
-        echo "Checking new attestation manifest"
+        echo "Checking new attestation manifest "
         while IFS= read -r file; do
           echo "File: $file"
           cat "$file"
