@@ -55,11 +55,11 @@ jobs:
       id: attest-provenance
       uses: actions/attest-build-provenance@v2
       env:
-        INPUT_PRIVATE-SIGNING: false       # avoid uploading to rekor transparency log
+        INPUT_PRIVATE-SIGNING: false       # true: avoid uploading to rekor transparency log
       with:
         subject-name: ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }} #e.g: evidencetrial.jfrog.io/evidence-demo-docker-dev/github-hello-world
         subject-digest: ${{ steps.docker.outputs.docker_digest }}                         #e.g: sha256:5b756bece92a704cd1dbf971b650dd99d9f949a68ec8f3fa03b0d595694467a3
-        push-to-registry: false
+        push-to-registry: true
     - name: Upload external attestation
       uses: actions/attest@v2
       id: attest-predicate
@@ -68,7 +68,7 @@ jobs:
         subject-digest: ${{ steps.docker.outputs.docker_digest }}                         #e.g: sha256:5b756bece92a704cd1dbf971b650dd99d9f949a68ec8f3fa03b0d595694467a3
         predicate-type: 'https://in-toto.io/attestation/release/v0.1'
         predicate: '{"key":"some value"}'
-        push-to-registry: false
+        push-to-registry: true
     - name: Install and sign with Cosign
       if: false
       run: |
