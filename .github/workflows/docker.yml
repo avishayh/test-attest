@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main  # Change this to the branch you want to monitor
+  workflow_dispatch:
 
 jobs:
   hello-docker:
