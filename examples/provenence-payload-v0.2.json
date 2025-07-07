@@ -1,0 +1,64 @@
+{
+  "_type": "https://in-toto.io/Statement/v0.1",
+  "predicateType": "https://slsa.dev/provenance/v0.2",
+  "subject": [
+    {
+      "name": "pkg:docker/evidencetrial.jfrog.io/evidence-demo-docker-dev/github-hello-world@77?platform=linux%2Famd64",
+      "digest": {
+        "sha256": "2b35eb5f7140e8c53dfffe0b03e103aa12ce60f5acce54c4812adc84e4b1ec0f"
+      }
+    }
+  ],
+  "predicate": {
+    "builder": {
+      "id": ""
+    },
+    "buildType": "https://mobyproject.org/buildkit@v1",
+    "materials": [
+      {
+        "uri": "pkg:docker/alpine@latest?platform=linux%2Famd64",
+        "digest": {
+          "sha256": "8a1f59ffb675680d47db6337b49d22281a139e9d709335b492be023728e11715"
+        }
+      }
+    ],
+    "invocation": {
+      "configSource": {
+        "entryPoint": "Dockerfile"
+      },
+      "parameters": {
+        "frontend": "dockerfile.v0",
+        "locals": [
+          {
+            "name": "context"
+          },
+          {
+            "name": "dockerfile"
+          }
+        ]
+      },
+      "environment": {
+        "platform": "linux/amd64"
+      }
+    },
+    "metadata": {
+      "buildInvocationID": "2iler8uwp5o0ygxvd2iscft95",
+      "buildStartedOn": "2025-07-07T07:26:21.488053841Z",
+      "buildFinishedOn": "2025-07-07T07:26:22.899219643Z",
+      "completeness": {
+        "parameters": true,
+        "environment": true,
+        "materials": false
+      },
+      "reproducible": false,
+      "https://mobyproject.org/buildkit@v1#metadata": {
+        "vcs": {
+          "localdir:context": ".",
+          "localdir:dockerfile": ".",
+          "revision": "cd91494ad641cc30aab5264597905db9a03c5431",
+          "source": "https://github.com/avishayh/test-attest"
+        }
+      }
+    }
+  }
+}
