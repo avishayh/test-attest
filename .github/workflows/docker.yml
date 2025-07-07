@@ -87,7 +87,7 @@ jobs:
         while IFS= read -r file; do
           echo "File: $file"
           cat "$file"
-        done < /tmp/attestations
+        done < ${RUNNER_TEMP}/created_attestation_paths.txt
         
         
         gh --version
