@@ -32,9 +32,9 @@ end
 GH_JFrog -> EvidenceService : GET /evidence/api/v1/config
 activate EvidenceService #LightGreen
 EvidenceService -> EvidenceService : check E license
-EvidenceService --> GH_JFrog : { <color green>external_evidence_collection_enabled</color> : "true|false"}
+EvidenceService --> GH_JFrog : { <color green>external_evidence_collection_supported</color> : "true|false"}
 deactivate EvidenceService
-alt If <color green>external_evidence_collection_enabled</color> is false
+alt If <color green>external_evidence_collection_supported</color> is false
     GH_JFrog --> Build : Exit flow
 end
 loop For each file_path in attestation_manifest
