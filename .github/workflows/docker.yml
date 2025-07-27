@@ -39,6 +39,24 @@ jobs:
         use: true
         platforms: linux/amd64,linux/arm64
         install: true
+
+    - name: Extract metadata (tags, labels) for Docker
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}
+
+    - name: Build and push Docker image
+      id: build-and-push
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        # Enable provenance and SBOM generation
+        provenance: false
+        sbom: false
     - name: Docker Build and Push
       id: docker
       run: |

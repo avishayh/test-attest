@@ -1,0 +1,66 @@
+@startuml
+!theme cerulean
+hide footbox
+
+!define JFROG_ICON https://speedmedia.jfrog.com/08612fe1-9391-4cf3-ac1a-6dd49c36b276/media.jfrog.com/wp-content/uploads/2024/08/08132607/jfrog-logo-2022.svg
+!define GITHUB_ICON https://img.icons8.com/?size=65&id=12599&format=png&color=000000
+title <img:JFROG_ICON> Release Bundle <-> Worker <-> Github Action <img:GITHUB_ICON>
+
+actor "User A" as UserA
+actor "User B" as UserB
+actor "Admin" as Admin
+participant "Repo A..Z" as ms
+participant "Shared Repo" as Shared
+participant "JFrog Worker" as Worker
+participant "Github Action" as gh
+
+== Setup Time ==
+activate Admin #LightGreen
+Admin -> Worker: Configure Event driven worker
+note right of Worker
+Setup Github Action credentials & resource
+
+type: After Release Bundle Promotion
+-- custom logic
+-- trigger user's Github Action with payload
+end note
+Worker -> Admin: Done
+deactivate Admin
+== Build Time ==
+activate UserA #LightGreen
+
+UserA -> ms: Build package version P1
+UserA -> ms: Create & Promote Release bundle RB1
+ms -> Shared: RB1 bundle promoted to shared repo
+Shared -> Worker: RB1 Promotion event
+note right of Shared
+    {
+       "stage" : "Shared",
+       "from" : "repoA",
+       "project" : "projA",
+       "name" : "RB1",
+       "version" : "1.10.0",
+    }
+end note
+deactivate UserA
+activate UserB #LightGreen
+UserB -> ms: Build package version P2
+UserB -> ms: Create & Promote Release bundle RB2
+ms -> Shared: RB2 bundle promoted to shared repo
+Shared -> Worker: RB2 Promotion event
+note right of Shared
+    {
+        ...
+    }
+end note
+deactivate UserB
+
+
+
+alt If <color green>disable-auto-evidence-collection</color> is true || manifest file is empty
+    UserB --> ms : Exit flow
+end
+loop For each file_path in attestation_manifest
+    ms -> UserB: Report success/failure result with information
+end
+@enduml
