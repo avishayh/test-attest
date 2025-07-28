@@ -53,7 +53,7 @@ jobs:
     - name: Docker Build and Push
       id: docker
       run: |
-       docker build \
+       jf docker build \
         --tag ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:2.${{ github.run_number }} \
         --metadata-file metadata.json \
         --push .
