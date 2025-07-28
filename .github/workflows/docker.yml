@@ -54,7 +54,7 @@ jobs:
       id: docker
       run: |
        jf docker build \
-        --tag ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.run_number }} \
+        --tag ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:2.${{ github.run_number }} \
         --metadata-file metadata.json \
         --push .
         
