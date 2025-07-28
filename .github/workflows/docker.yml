@@ -57,11 +57,13 @@ jobs:
       run: |
        jf docker buildx build \
         --tag ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.run_number }}-jf \
+        --platform linux/amd64 \
         --metadata-file metadata.json \
         --push .
         
        docker buildx build \
         --tag ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.run_number }}-docker \
+        --platform linux/amd64 \
         --metadata-file metadata.json \
         --push .
         
