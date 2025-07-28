@@ -50,12 +50,12 @@ jobs:
         push: true
         tags: ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:1.${{ github.run_number }}
         # Enable provenance and SBOM generation
-        provenance: true
-        sbom: true
+        provenance: false
+        sbom: false
     - name: Docker Build and Push
       id: docker
       run: |
-       docker buildx build \
+       docker build \
         --tag ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:2.${{ github.run_number }} \
         --metadata-file metadata.json \
         --push .
