@@ -55,18 +55,15 @@ jobs:
     - name: Docker Build and Push
       id: docker
       run: |
-        
-       which docker
-        
        jf docker buildx build \
         --tag ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.run_number }}-jf \
-        --platform linux/amd64 \
+        --attest type=provenance,disabled=true --attest type=sbom,disabled=true
         --metadata-file metadata.json \
         --push .
         
        docker buildx build \
         --tag ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.run_number }}-docker \
-        --platform linux/amd64 \
+        --attest type=provenance,disabled=true --attest type=sbom,disabled=true
         --metadata-file metadata.json \
         --push .
         
