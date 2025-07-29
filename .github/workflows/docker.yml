@@ -57,13 +57,13 @@ jobs:
       run: |
        jf docker buildx build \
         --tag ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.run_number }}-jf \
-        --attest type=provenance,disabled=true --attest type=sbom,disabled=true
+        --attest type=provenance,disabled=true --attest type=sbom,disabled=true \
         --metadata-file metadata.json \
         --push .
         
        docker buildx build \
         --tag ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.run_number }}-docker \
-        --attest type=provenance,disabled=true --attest type=sbom,disabled=true
+        --attest type=provenance,disabled=true --attest type=sbom,disabled=true \
         --metadata-file metadata.json \
         --push .
         
