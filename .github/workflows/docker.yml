@@ -50,20 +50,20 @@ jobs:
         push: true
         tags: ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.run_number }}-action
         # Enable provenance and SBOM generation
-        provenance: false
-        sbom: false
+        provenance: true
+        sbom: true
     - name: Docker Build and Push
       id: docker
       run: |
        jf docker buildx build \
         --tag ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.run_number }}-jf \
-        --attest type=provenance,disabled=true --attest type=sbom,disabled=true \
+        --provenance=true --sbom=true \
         --metadata-file metadata.json \
         --push .
         
        docker buildx build \
         --tag ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.run_number }}-docker \
-        --attest type=provenance,disabled=true --attest type=sbom,disabled=true \
+        --provenance=false --sbom=false \
         --metadata-file metadata.json \
         --push .
         
