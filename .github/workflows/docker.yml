@@ -73,7 +73,7 @@ jobs:
        echo "docker_digest=$digest" | tr -d '"' >> $GITHUB_OUTPUT
 
     - name: Generate docker attestation
-      if: false
+      if: true
       id: attest-provenance
       uses: actions/attest-build-provenance@v2
       env:
