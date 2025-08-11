@@ -1,0 +1,139 @@
+@startuml
+!theme cerulean
+hide footbox
+
+!define JFROG_ICON https://speedmedia.jfrog.com/08612fe1-9391-4cf3-ac1a-6dd49c36b276/media.jfrog.com/wp-content/uploads/2024/08/08132607/jfrog-logo-2022.svg
+title <img:JFROG_ICON> Internal & External Services -> Evidence Creation
+
+participant "External Service" as es
+participant "Platform Service" as ps
+participant "Evidence" as evd
+participant "Lifecycle" as lf
+participant "AppTrust" as app
+participant "Artifactory" as rt
+
+== Internal evidence creation ==
+activate ps #LightGreen
+ps -> evd ++ : POST /evidence/sign
+note right of ps
+Request
+{
+    "subject": {
+        "type": "release_bundle|application_version",
+         "release_bundle_name": "myBundle",
+         "release_bundle_version": "3.1"
+         [O] "project_key" : "strg",
+         OR
+         "application_key": "myApp",
+         "application_version": "1.0.0"
+         [O] sha256: "a012b00f12...",
+      },
+    "predicate_type" : "https://jfrog.com/evidence/promotion/v1",
+    "predicate" : {
+        "promotion" : "..."
+    }
+    ...
+    [O/M] "signing_key": "strg-key"
+}
+end note
+note over evd, app #259724: Resolve Subject Data
+group "type" :"release-bundle"
+evd --> lf ** : Get Stage & Subject path & Sha256
+note right of evd
+GET /release_bundle/internal/details/{name}/{version}?[project_key]
+
+Response: {
+"download_path": "{project}-release-bundle/{name}/{v}/release-bundle.json.evd",
+"stage": "QA"
+"sha256": "a012b00f12..."
+}
+end note
+end
+group "type" :"application-version"
+evd --> app ** : Get Stage & Subject path & Sha256
+note right of evd
+GET /apptrust/api/v1/applications/{application_key}/versions/{version}
+
+Response: {
+"download_path": "{project}-release-bundle/{name}/{v}/release-bundle.json.evd",
+"stage": "QA"
+"sha256": "a012b00f12..."
+}
+end note
+end
+note over evd, app #259724: construct In-Toto Payload
+note over evd, app #259724: construct DSSE Payload
+evd --> rt ** : Sign In-Toto with key-pair
+note right of evd
+POST /lifecycle/api/v2/keys/{key-pair}/sign/dsse
+
+Request
+{
+ #intoto_payload
+}
+
+Response
+{
+ #dsse_payload
+}
+end note
+note over evd, app #259724: Save evidence
+evd --> rt: Upload evidence file to Artifactory .evidence folder
+evd --> rt: Update properties
+evd --> evd : Update DB evidence table
+group "type" :"release_bundle"
+evd --> lf ** : Notify RBV2 audit log
+note right of evd
+POST /lifecycle/api/v2/audit
+end note
+end
+group "type" :"application_version"
+evd --> app ** : Notify AppTrust audit log
+end
+evd -> ps --: 201 Response
+deactivate ps
+
+== External evidence creation ==
+activate es #LightGreen
+es -> evd ++ : POST /evidence/prepare
+note right of es
+Request: {
+    "subject": {
+        "type": "release_bundle|application_version",
+        "release_bundle_name": "myName",
+        "release_bundle_version": "1.0.0"
+        "project_key" : "myPr1",
+        OR
+        "application_key": "myName",
+        "application_version": "1.0.0"
+        [O] sha256: "a012b00f12...",
+    },
+    "predicate_type" : "https://jfrog.com/evidence/promotion/v1",
+    "predicate" : {
+        "promotion" : "..."
+    },
+    provider_id: "ext_provider"
+    ...
+}
+end note
+note over evd, app #259724: Resolve Subject Data
+note over evd, app #259724: construct In-Toto Payload
+evd -> es -- : 201 Response
+note right of es
+{
+  "post_url" : "/evidence/api/v1/subject/myPr1-release-bundle/myName/1.0.0/release-bundle.evd.json?provider_id=ext_provider",
+  "dsse_payload" : "<base64_string(in-toto)>"
+  "dsse_payload_type" : "application/vnd.in-toto+json",
+}
+end note
+note right of es  #259724: Sign & construct DSSE Payload
+note right of es  #259724: Upload DSSE payload using ${post_url}
+es -> evd ++ : POST Evidence by Subject Url
+note right of es
+POST $post_url -d "dsse_payload"
+end note
+note over evd, app #259724: Verify subject against sha256
+note over evd, app #259724: Save evidence
+evd -> es -- : 201 Response
+deactivate es
+@enduml
