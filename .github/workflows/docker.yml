@@ -83,6 +83,8 @@ jobs:
       with:
 #        subject-name: ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }} #e.g: evidencetrial.jfrog.io/evidence-demo-docker-dev/github-hello-world
 #        subject-name: ${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}/${{ github.run_number }}-docker/manifest.json
+#        subject-name: package://${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}
+#        subject-name: package://${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}
         subject-name: ${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}/${{ github.run_number }}-action/list-manifest.json
         subject-digest: ${{ steps.docker.outputs.docker_digest }}                         #e.g: sha256:5b756bece92a704cd1dbf971b650dd99d9f949a68ec8f3fa03b0d595694467a3
         push-to-registry: false
