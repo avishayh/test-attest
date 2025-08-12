@@ -54,6 +54,12 @@ jobs:
         provenance: true
         sbom: true
 
+    - name: Get and use the Image Digest
+      run: |
+        echo "Image Digest: ${{ steps.build-and-push.outputs.digest }}"
+        echo "Image Digest: ${{ steps.build-and-push.outputs.digest }}" >> $GITHUB_OUTPUT
+        echo "docker_digest=${{ steps.build-and-push.outputs.digest }}" >> $GITHUB_ENV
+        echo "docker_image=${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.run_number }}-action" >> $GITHUB_ENV
     - name: Generate docker attestation
       if: true
       id: attest-provenance
@@ -63,15 +69,17 @@ jobs:
       with:
 #        subject-name: ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }} #e.g: evidencetrial.jfrog.io/evidence-demo-docker-dev/github-hello-world
 #        subject-digest: ${{ steps.docker.outputs.docker_digest }}                         #e.g: sha256:5b756bece92a704cd1dbf971b650dd99d9f949a68ec8f3fa03b0d595694467a3
+#        push-to-registry: true
+
         subject-name: ${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}/${{ github.run_number }}-docker/manifest.json
         subject-digest: ${{ steps.build-and-push.outputs.digest }}                         #e.g: sha256:5b756bece92a704cd1dbf971b650dd99d9f949a68ec8f3fa03b0d595694467a3
-        push-to-registry: false
+
     - name: Upload external attestation
       if: false
       uses: actions/attest@v2
       id: attest-predicate
       with:
-        subject-name: ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}                        #e.g: evidence-demo-docker-dev/github-hello-world
+        subject-name: ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }} #e.g: evidence-demo-docker-dev/github-hello-world
         subject-digest: ${{ steps.docker.outputs.docker_digest }}                         #e.g: sha256:5b756bece92a704cd1dbf971b650dd99d9f949a68ec8f3fa03b0d595694467a3
         predicate-type: 'https://in-toto.io/attestation/release/v0.1'
         predicate: '{"key":"some value"}'
