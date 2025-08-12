@@ -54,7 +54,6 @@ jobs:
         provenance: true
         sbom: true
     - name: Docker Build and Push
-      if: true
       id: docker
       run: |
         
