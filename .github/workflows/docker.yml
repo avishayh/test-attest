@@ -43,7 +43,7 @@ jobs:
 #        install: true
 
     - name: Build and push Docker image
-      if: false
+      if: true
       id: build-and-push
       uses: docker/build-push-action@v6
       with:
@@ -54,6 +54,7 @@ jobs:
         provenance: true
         sbom: true
     - name: Docker Build and Push
+      if: false
       id: docker
       run: |
        jf docker buildx build \
@@ -81,7 +82,8 @@ jobs:
         INPUT_PRIVATE-SIGNING: false       # true: avoid uploading to rekor transparency log
       with:
 #        subject-name: ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }} #e.g: evidencetrial.jfrog.io/evidence-demo-docker-dev/github-hello-world
-        subject-name: ${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}/${{ github.run_number }}-docker/manifest.json
+#        subject-name: ${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}/${{ github.run_number }}-docker/manifest.json
+        subject-name: ${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}/${{ github.run_number }}-action/list-manifest.json
         subject-digest: ${{ steps.docker.outputs.docker_digest }}                         #e.g: sha256:5b756bece92a704cd1dbf971b650dd99d9f949a68ec8f3fa03b0d595694467a3
         push-to-registry: false
     - name: Upload external attestation
