@@ -81,7 +81,7 @@ jobs:
       env:
         INPUT_PRIVATE-SIGNING: false       # true: avoid uploading to rekor transparency log
       with:
-        subject-name: ${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}/${{ github.run_number }}-docker/manifest.json
+        subject-name: ${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}/${{ github.run_number }}
         subject-digest: ${{ steps.docker.outputs.docker_digest }}                         #e.g: sha256:5b756bece92a704cd1dbf971b650dd99d9f949a68ec8f3fa03b0d595694467a3
         push-to-registry: false
     - name: Upload external attestation
