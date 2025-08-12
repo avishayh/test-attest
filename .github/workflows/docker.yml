@@ -53,6 +53,7 @@ jobs:
         # Enable provenance and SBOM generation
         provenance: true
         sbom: true
+
     - name: Docker Build and Push
       id: docker
       run: |
