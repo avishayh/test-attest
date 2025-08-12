@@ -57,7 +57,7 @@ jobs:
     - name: Get and use the Image Digest
       run: |
         echo "Digest: ${{ steps.build-and-push.outputs.digest }}"
-        echo "image: ${{ steps.build-and-push.outputs.image }}"
+        echo "imageid: ${{ steps.build-and-push.outputs.imageid }}"
         echo "metadata: ${{ steps.build-and-push.outputs.metadata }}"
 
     - name: Generate docker attestation
