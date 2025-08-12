@@ -54,30 +54,6 @@ jobs:
         provenance: true
         sbom: true
 
-    - name: Docker Build and Push
-      id: docker
-      run: |
-        
-        IMAGE_DIGEST="${{ steps.build-and-push.outputs.digest }}" 
-        echo "Docker Image Digest: $IMAGE_DIGEST"
-        
-        jf docker buildx build \
-        --tag ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.run_number }}-jf \
-        --provenance=true --sbom=true \
-        --metadata-file metadata.json \
-        --push .
-        
-       docker buildx build \
-        --tag ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.run_number }}-docker \
-        --provenance=false --sbom=false \
-        --metadata-file metadata.json \
-        --push .
-        
-       #capture digest to step output
-       digest=$(cat metadata.json | jq '.["containerimage.digest"]')
-       echo "docker_digest=$digest"
-       echo "docker_digest=$digest" | tr -d '"' >> $GITHUB_OUTPUT
-
     - name: Generate docker attestation
       if: true
       id: attest-provenance
