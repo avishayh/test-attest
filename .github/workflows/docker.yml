@@ -58,7 +58,7 @@ jobs:
       id: docker
       run: |
         
-        IMAGE_DIGEST="${{ steps.build-and-push.outputs.digest }}" # <--- Access the digest here
+        IMAGE_DIGEST="${{ steps.build-and-push.outputs.digest }}" 
         echo "Docker Image Digest: $IMAGE_DIGEST"
         
         jf docker buildx build \
