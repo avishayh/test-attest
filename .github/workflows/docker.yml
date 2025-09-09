@@ -5,6 +5,12 @@ on:
     branches:
       - main  # Change this to the branch you want to monitor
   workflow_dispatch:
+    inputs:
+      private-signing:
+        description: 'use private signing (do not upload to rekor)'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   hello-docker:
@@ -62,10 +68,10 @@ jobs:
 
     - name: Generate docker attestation
       if: true
-      id: attest-provenance
       uses: actions/attest-build-provenance@v2
+      id: attest-provenance
       env:
-        INPUT_PRIVATE-SIGNING: false       # true: avoid uploading to rekor transparency log
+        INPUT_PRIVATE-SIGNING: ${{ inputs.private-signing }}       # true: avoid uploading to rekor transparency log
       with:
         subject-name: oci://${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }} #e.g: evidencetrial.jfrog.io/evidence-demo-docker-dev/github-hello-world
         subject-digest: ${{ steps.build-and-push.outputs.digest }}                         #e.g: sha256:5b756bece92a704cd1dbf971b650dd99d9f949a68ec8f3fa03b0d595694467a3
@@ -74,6 +80,8 @@ jobs:
       if: false
       uses: actions/attest@v2
       id: attest-predicate
+      env:
+        INPUT_PRIVATE-SIGNING: ${{ inputs.private-signing }}       # true: avoid uploading to rekor transparency log
       with:
         subject-name: ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }} #e.g: evidence-demo-docker-dev/github-hello-world
         subject-digest: ${{ steps.docker.outputs.docker_digest }}                         #e.g: sha256:5b756bece92a704cd1dbf971b650dd99d9f949a68ec8f3fa03b0d595694467a3
