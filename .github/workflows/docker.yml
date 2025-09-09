@@ -77,7 +77,6 @@ jobs:
         subject-digest: ${{ steps.build-and-push.outputs.digest }}                         #e.g: sha256:5b756bece92a704cd1dbf971b650dd99d9f949a68ec8f3fa03b0d595694467a3
 
     - name: Upload external attestation
-      if: false
       uses: actions/attest@v2
       id: attest-predicate
       env:
