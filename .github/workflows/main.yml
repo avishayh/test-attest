@@ -1,13 +1,9 @@
 name: Hello World
 
 on:
-#  push:
-#    branches:
-#      - main  # Change this to the branch you want to monitor
   pull_request:
     branches:
       - main  # Change this to the branch for PRs
-  # Allows the workflow to be triggered manually
   workflow_dispatch:
     inputs:
       subject-name:

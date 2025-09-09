@@ -2,9 +2,6 @@
 !theme cerulean
 hide footbox
 
-!define JFROG_ICON https://speedmedia.jfrog.com/08612fe1-9391-4cf3-ac1a-6dd49c36b276/media.jfrog.com/wp-content/uploads/2024/08/08132607/jfrog-logo-2022.svg
-title <img:JFROG_ICON> Internal & External Services -> Evidence Creation
-
 participant "External Service" as es
 participant "Platform Service" as ps
 participant "Evidence" as evd
