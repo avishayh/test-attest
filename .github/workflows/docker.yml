@@ -83,7 +83,7 @@ jobs:
         INPUT_PRIVATE-SIGNING: ${{ inputs.private-signing }}       # true: avoid uploading to rekor transparency log
       with:
         subject-name: ${{ env.JF_REGISTRY }}/${{ env.DOCKER_REPO }}/${{ env.IMAGE_NAME }} #e.g: evidence-demo-docker-dev/github-hello-world
-        subject-digest: ${{ steps.docker.outputs.docker_digest }}                         #e.g: sha256:5b756bece92a704cd1dbf971b650dd99d9f949a68ec8f3fa03b0d595694467a3
+        subject-digest: ${{ steps.build-and-push.outputs.docker_digest }}                 #e.g: sha256:5b756bece92a704cd1dbf971b650dd99d9f949a68ec8f3fa03b0d595694467a3
         predicate-type: 'https://in-toto.io/attestation/release/v0.1'
         predicate: '{"key":"some value"}'
         push-to-registry: false
